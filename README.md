@@ -56,3 +56,4 @@ csv-analyst-assistant/
   .gitignore
   .env.example
 ```
+# ise547project
