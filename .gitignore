@@ -1,0 +1,76 @@
+### Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+### Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env
+.env.*
+!.env.example
+
+### Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+### Type checking / linting
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+### Jupyter / notebooks
+.ipynb_checkpoints/
+
+### Streamlit
+.streamlit/secrets.toml
+
+### IDEs / OS
+.DS_Store
+.idea/
+.vscode/
+
+### Logs / runtime artifacts
+*.log
+outputs/logs/
+
+### Data (keep structure, ignore contents)
+data/raw/*
+data/processed/*
+data/samples/*
+data/benchmarks/*.tmp
+!data/raw/.gitkeep
+!data/raw/sales_data.csv
+!data/raw/insurance_data.csv
+!data/raw/retail_orders.csv
+!data/processed/.gitkeep
+!data/samples/.gitkeep
+
+### Evaluation artifacts
+outputs/eval_runs/*
+outputs/figures/*
+!outputs/eval_runs/.gitkeep
+!outputs/figures/.gitkeep
