@@ -1,0 +1,121 @@
+question_id,dataset_name,question_text,task_type,metric_column,aggregation,groupby_column,filters,time_column,time_granularity,time_column_format,expected_chart_type
+Q001,sales_data,What is the average sales amount in sales dataset? (S1),summary_stat,sales,mean,,,,,,none
+Q002,sales_data,Compute the maximum of profit for sales dataset. (S2),summary_stat,profit,max,,,,,,none
+Q003,sales_data,Give me the median value for discount. (S3),summary_stat,discount,median,,,,,,none
+Q004,insurance_data,"For this insurance dataset table, what is the average charges? (S4)",summary_stat,charges,mean,,,,,,none
+Q005,insurance_data,Report the maximum of age. (S5),summary_stat,age,max,,,,,,none
+Q006,insurance_data,What is the median BMI in insurance dataset? (S6),summary_stat,bmi,median,,,,,,none
+Q007,retail_orders,Compute the average of order value for retail orders dataset. (S7),summary_stat,order_value,mean,,,,,,none
+Q008,retail_orders,Give me the maximum value for order value. (S8),summary_stat,order_value,max,,,,,,none
+Q009,retail_orders,"For this retail orders dataset table, what is the median items count? (S9)",summary_stat,items_count,median,,,,,,none
+Q010,retail_orders,Report the total of order value. (S10),summary_stat,order_value,sum,,,,,,none
+Q011,sales_data,What is the average sales amount in sales dataset? (S11),summary_stat,sales,mean,,,,,,none
+Q012,sales_data,Compute the maximum of profit for sales dataset. (S12),summary_stat,profit,max,,,,,,none
+Q013,sales_data,Give me the median value for discount. (S13),summary_stat,discount,median,,,,,,none
+Q014,insurance_data,"For this insurance dataset table, what is the average charges? (S14)",summary_stat,charges,mean,,,,,,none
+Q015,insurance_data,Report the maximum of age. (S15),summary_stat,age,max,,,,,,none
+Q016,insurance_data,What is the median BMI in insurance dataset? (S16),summary_stat,bmi,median,,,,,,none
+Q017,retail_orders,Compute the average of order value for retail orders dataset. (S17),summary_stat,order_value,mean,,,,,,none
+Q018,retail_orders,Give me the maximum value for order value. (S18),summary_stat,order_value,max,,,,,,none
+Q019,retail_orders,"For this retail orders dataset table, what is the median items count? (S19)",summary_stat,items_count,median,,,,,,none
+Q020,retail_orders,Report the total of order value. (S20),summary_stat,order_value,sum,,,,,,none
+Q021,sales_data,What is the average sales amount in sales dataset? (S21),summary_stat,sales,mean,,,,,,none
+Q022,sales_data,Compute the maximum of profit for sales dataset. (S22),summary_stat,profit,max,,,,,,none
+Q023,sales_data,Give me the median value for discount. (S23),summary_stat,discount,median,,,,,,none
+Q024,insurance_data,"For this insurance dataset table, what is the average charges? (S24)",summary_stat,charges,mean,,,,,,none
+Q025,insurance_data,Report the maximum of age. (S25),summary_stat,age,max,,,,,,none
+Q026,insurance_data,What is the median BMI in insurance dataset? (S26),summary_stat,bmi,median,,,,,,none
+Q027,retail_orders,Compute the average of order value for retail orders dataset. (S27),summary_stat,order_value,mean,,,,,,none
+Q028,retail_orders,Give me the maximum value for order value. (S28),summary_stat,order_value,max,,,,,,none
+Q029,retail_orders,"For this retail orders dataset table, what is the median items count? (S29)",summary_stat,items_count,median,,,,,,none
+Q030,retail_orders,Report the total of order value. (S30),summary_stat,order_value,sum,,,,,,none
+Q031,sales_data,Show total sales by region. (G1),grouped_aggregation,sales,sum,region,,,,,bar
+Q032,sales_data,Which category has the highest average profit? (G2),grouped_aggregation,profit,mean,category,,,,,bar
+Q033,sales_data,Break down discount by region using average. (G3),grouped_aggregation,discount,mean,region,,,,,bar
+Q034,insurance_data,Create a grouped view of average charges across smoker status. (G4),grouped_aggregation,charges,mean,smoker,,,,,bar
+Q035,insurance_data,Compare count records for each region. (G5),grouped_aggregation,age,count,region,,,,,bar
+Q036,insurance_data,Show average BMI by region. (G6),grouped_aggregation,bmi,mean,region,,,,,bar
+Q037,retail_orders,Which channel has the highest total order value? (G7),grouped_aggregation,order_value,sum,channel,,,,,bar
+Q038,retail_orders,Break down order value by payment method using average. (G8),grouped_aggregation,order_value,mean,payment_method,,,,,bar
+Q039,retail_orders,Create a grouped view of total items count across channel. (G9),grouped_aggregation,items_count,sum,channel,,,,,bar
+Q040,retail_orders,Compare count orders for each channel. (G10),grouped_aggregation,order_value,count,channel,,,,,bar
+Q041,sales_data,Show total sales by region. (G11),grouped_aggregation,sales,sum,region,,,,,bar
+Q042,sales_data,Which category has the highest average profit? (G12),grouped_aggregation,profit,mean,category,,,,,bar
+Q043,sales_data,Break down discount by region using average. (G13),grouped_aggregation,discount,mean,region,,,,,bar
+Q044,insurance_data,Create a grouped view of average charges across smoker status. (G14),grouped_aggregation,charges,mean,smoker,,,,,bar
+Q045,insurance_data,Compare count records for each region. (G15),grouped_aggregation,age,count,region,,,,,bar
+Q046,insurance_data,Show average BMI by region. (G16),grouped_aggregation,bmi,mean,region,,,,,bar
+Q047,retail_orders,Which channel has the highest total order value? (G17),grouped_aggregation,order_value,sum,channel,,,,,bar
+Q048,retail_orders,Break down order value by payment method using average. (G18),grouped_aggregation,order_value,mean,payment_method,,,,,bar
+Q049,retail_orders,Create a grouped view of total items count across channel. (G19),grouped_aggregation,items_count,sum,channel,,,,,bar
+Q050,retail_orders,Compare count orders for each channel. (G20),grouped_aggregation,order_value,count,channel,,,,,bar
+Q051,sales_data,Show total sales by region. (G21),grouped_aggregation,sales,sum,region,,,,,bar
+Q052,sales_data,Which category has the highest average profit? (G22),grouped_aggregation,profit,mean,category,,,,,bar
+Q053,sales_data,Break down discount by region using average. (G23),grouped_aggregation,discount,mean,region,,,,,bar
+Q054,insurance_data,Create a grouped view of average charges across smoker status. (G24),grouped_aggregation,charges,mean,smoker,,,,,bar
+Q055,insurance_data,Compare count records for each region. (G25),grouped_aggregation,age,count,region,,,,,bar
+Q056,insurance_data,Show average BMI by region. (G26),grouped_aggregation,bmi,mean,region,,,,,bar
+Q057,retail_orders,Which channel has the highest total order value? (G27),grouped_aggregation,order_value,sum,channel,,,,,bar
+Q058,retail_orders,Break down order value by payment method using average. (G28),grouped_aggregation,order_value,mean,payment_method,,,,,bar
+Q059,retail_orders,Create a grouped view of total items count across channel. (G29),grouped_aggregation,items_count,sum,channel,,,,,bar
+Q060,retail_orders,Compare count orders for each channel. (G30),grouped_aggregation,order_value,count,channel,,,,,bar
+Q061,sales_data,What is the average sales where region is East? (F1),filtered_aggregation,sales,mean,,"[{""column"": ""region"", ""operator"": ""=="", ""value"": ""East""}]",,,,none
+Q062,sales_data,"For rows with category is Electronics, compute total profit. (F2)",filtered_aggregation,profit,sum,,"[{""column"": ""category"", ""operator"": ""=="", ""value"": ""Electronics""}]",,,,none
+Q063,sales_data,Calculate count rows for records where discount is greater than 0.2. (F3),filtered_aggregation,discount,count,,"[{""column"": ""discount"", ""operator"": "">"", ""value"": 0.2}]",,,,none
+Q064,sales_data,"When region contains 'o', what is the median sales? (F4)",filtered_aggregation,sales,median,,"[{""column"": ""region"", ""operator"": ""contains"", ""value"": ""o""}]",,,,none
+Q065,insurance_data,Return average charges under the condition: smoker equals yes. (F5),filtered_aggregation,charges,mean,,"[{""column"": ""smoker"", ""operator"": ""=="", ""value"": ""yes""}]",,,,none
+Q066,insurance_data,What is the count records where age is greater than 65? (F6),filtered_aggregation,age,count,,"[{""column"": ""age"", ""operator"": "">"", ""value"": 65}]",,,,none
+Q067,insurance_data,"For rows with region is southeast, compute total charges. (F7)",filtered_aggregation,charges,sum,,"[{""column"": ""region"", ""operator"": ""=="", ""value"": ""southeast""}]",,,,none
+Q068,insurance_data,Calculate average BMI for records where region contains 'south'. (F8),filtered_aggregation,bmi,mean,,"[{""column"": ""region"", ""operator"": ""contains"", ""value"": ""south""}]",,,,none
+Q069,retail_orders,"When channel is online, what is the total order value? (F9)",filtered_aggregation,order_value,sum,,"[{""column"": ""channel"", ""operator"": ""=="", ""value"": ""online""}]",,,,none
+Q070,retail_orders,Return average order value under the condition: items_count is at least 5. (F10),filtered_aggregation,order_value,mean,,"[{""column"": ""items_count"", ""operator"": "">="", ""value"": 5}]",,,,none
+Q071,retail_orders,What is the count orders where payment method is card? (F11),filtered_aggregation,order_value,count,,"[{""column"": ""payment_method"", ""operator"": ""=="", ""value"": ""card""}]",,,,none
+Q072,retail_orders,"For rows with channel contains 'o', compute total items count. (F12)",filtered_aggregation,items_count,sum,,"[{""column"": ""channel"", ""operator"": ""contains"", ""value"": ""o""}]",,,,none
+Q073,sales_data,Calculate average sales for records where region is East. (F13),filtered_aggregation,sales,mean,,"[{""column"": ""region"", ""operator"": ""=="", ""value"": ""East""}]",,,,none
+Q074,sales_data,"When category is Electronics, what is the total profit? (F14)",filtered_aggregation,profit,sum,,"[{""column"": ""category"", ""operator"": ""=="", ""value"": ""Electronics""}]",,,,none
+Q075,sales_data,Return count rows under the condition: discount is greater than 0.2. (F15),filtered_aggregation,discount,count,,"[{""column"": ""discount"", ""operator"": "">"", ""value"": 0.2}]",,,,none
+Q076,sales_data,What is the median sales where region contains 'o'? (F16),filtered_aggregation,sales,median,,"[{""column"": ""region"", ""operator"": ""contains"", ""value"": ""o""}]",,,,none
+Q077,insurance_data,"For rows with smoker equals yes, compute average charges. (F17)",filtered_aggregation,charges,mean,,"[{""column"": ""smoker"", ""operator"": ""=="", ""value"": ""yes""}]",,,,none
+Q078,insurance_data,Calculate count records for records where age is greater than 65. (F18),filtered_aggregation,age,count,,"[{""column"": ""age"", ""operator"": "">"", ""value"": 65}]",,,,none
+Q079,insurance_data,"When region is southeast, what is the total charges? (F19)",filtered_aggregation,charges,sum,,"[{""column"": ""region"", ""operator"": ""=="", ""value"": ""southeast""}]",,,,none
+Q080,insurance_data,Return average BMI under the condition: region contains 'south'. (F20),filtered_aggregation,bmi,mean,,"[{""column"": ""region"", ""operator"": ""contains"", ""value"": ""south""}]",,,,none
+Q081,retail_orders,What is the total order value where channel is online? (F21),filtered_aggregation,order_value,sum,,"[{""column"": ""channel"", ""operator"": ""=="", ""value"": ""online""}]",,,,none
+Q082,retail_orders,"For rows with items_count is at least 5, compute average order value. (F22)",filtered_aggregation,order_value,mean,,"[{""column"": ""items_count"", ""operator"": "">="", ""value"": 5}]",,,,none
+Q083,retail_orders,Calculate count orders for records where payment method is card. (F23),filtered_aggregation,order_value,count,,"[{""column"": ""payment_method"", ""operator"": ""=="", ""value"": ""card""}]",,,,none
+Q084,retail_orders,"When channel contains 'o', what is the total items count? (F24)",filtered_aggregation,items_count,sum,,"[{""column"": ""channel"", ""operator"": ""contains"", ""value"": ""o""}]",,,,none
+Q085,sales_data,Return average sales under the condition: region is East. (F25),filtered_aggregation,sales,mean,,"[{""column"": ""region"", ""operator"": ""=="", ""value"": ""East""}]",,,,none
+Q086,sales_data,What is the total profit where category is Electronics? (F26),filtered_aggregation,profit,sum,,"[{""column"": ""category"", ""operator"": ""=="", ""value"": ""Electronics""}]",,,,none
+Q087,sales_data,"For rows with discount is greater than 0.2, compute count rows. (F27)",filtered_aggregation,discount,count,,"[{""column"": ""discount"", ""operator"": "">"", ""value"": 0.2}]",,,,none
+Q088,sales_data,Calculate median sales for records where region contains 'o'. (F28),filtered_aggregation,sales,median,,"[{""column"": ""region"", ""operator"": ""contains"", ""value"": ""o""}]",,,,none
+Q089,insurance_data,"When smoker equals yes, what is the average charges? (F29)",filtered_aggregation,charges,mean,,"[{""column"": ""smoker"", ""operator"": ""=="", ""value"": ""yes""}]",,,,none
+Q090,insurance_data,Return count records under the condition: age is greater than 65. (F30),filtered_aggregation,age,count,,"[{""column"": ""age"", ""operator"": "">"", ""value"": 65}]",,,,none
+Q091,sales_data,Show monthly total sales over time. (T1),time_series,sales,sum,,,order_date,month,iso_date,line
+Q092,sales_data,Plot total profit by weekly period. (T2),time_series,profit,sum,,,order_date,week,iso_date,line
+Q093,sales_data,Trend discount at a daily level using average. (T3),time_series,discount,mean,,,order_date,day,iso_date,line
+Q094,insurance_data,Create a monthly time series of average charges. (T4),time_series,charges,mean,,,record_date,month,iso_date,line
+Q095,insurance_data,How does charges change each weekly (total)? (T5),time_series,charges,sum,,,record_date,week,iso_date,line
+Q096,insurance_data,Show daily average BMI over time. (T6),time_series,bmi,mean,,,record_date,day,iso_date,line
+Q097,retail_orders,Plot total order value by monthly period. (T7),time_series,order_value,sum,,,order_date,month,iso_date,line
+Q098,retail_orders,Trend order value at a weekly level using average. (T8),time_series,order_value,mean,,,order_date,week,iso_date,line
+Q099,retail_orders,Create a daily time series of total items count. (T9),time_series,items_count,sum,,,order_date,day,iso_date,line
+Q100,retail_orders,How does order value change each monthly (median)? (T10),time_series,order_value,median,,,order_date,month,iso_date,line
+Q101,sales_data,Show monthly total sales over time. (T11),time_series,sales,sum,,,order_date,month,iso_date,line
+Q102,sales_data,Plot total profit by weekly period. (T12),time_series,profit,sum,,,order_date,week,iso_date,line
+Q103,sales_data,Trend discount at a daily level using average. (T13),time_series,discount,mean,,,order_date,day,iso_date,line
+Q104,insurance_data,Create a monthly time series of average charges. (T14),time_series,charges,mean,,,record_date,month,iso_date,line
+Q105,insurance_data,How does charges change each weekly (total)? (T15),time_series,charges,sum,,,record_date,week,iso_date,line
+Q106,insurance_data,Show daily average BMI over time. (T16),time_series,bmi,mean,,,record_date,day,iso_date,line
+Q107,retail_orders,Plot total order value by monthly period. (T17),time_series,order_value,sum,,,order_date,month,iso_date,line
+Q108,retail_orders,Trend order value at a weekly level using average. (T18),time_series,order_value,mean,,,order_date,week,iso_date,line
+Q109,retail_orders,Create a daily time series of total items count. (T19),time_series,items_count,sum,,,order_date,day,iso_date,line
+Q110,retail_orders,How does order value change each monthly (median)? (T20),time_series,order_value,median,,,order_date,month,iso_date,line
+Q111,sales_data,Show monthly total sales over time. (T21),time_series,sales,sum,,,order_date,month,iso_date,line
+Q112,sales_data,Plot total profit by weekly period. (T22),time_series,profit,sum,,,order_date,week,iso_date,line
+Q113,sales_data,Trend discount at a daily level using average. (T23),time_series,discount,mean,,,order_date,day,iso_date,line
+Q114,insurance_data,Create a monthly time series of average charges. (T24),time_series,charges,mean,,,record_date,month,iso_date,line
+Q115,insurance_data,How does charges change each weekly (total)? (T25),time_series,charges,sum,,,record_date,week,iso_date,line
+Q116,insurance_data,Show daily average BMI over time. (T26),time_series,bmi,mean,,,record_date,day,iso_date,line
+Q117,retail_orders,Plot total order value by monthly period. (T27),time_series,order_value,sum,,,order_date,month,iso_date,line
+Q118,retail_orders,Trend order value at a weekly level using average. (T28),time_series,order_value,mean,,,order_date,week,iso_date,line
+Q119,retail_orders,Create a daily time series of total items count. (T29),time_series,items_count,sum,,,order_date,day,iso_date,line
+Q120,retail_orders,How does order value change each monthly (median)? (T30),time_series,order_value,median,,,order_date,month,iso_date,line
