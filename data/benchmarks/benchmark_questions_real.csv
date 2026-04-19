@@ -1,0 +1,41 @@
+question_id,dataset_name,question_text,task_type,metric_column,aggregation,groupby_column,filters,time_column,time_granularity,time_column_format,expected_chart_type
+R001,insurance,What is the mean medical charges?,summary_stat,charges,mean,,,,,,none
+R002,insurance,Maximum age in the insurance data.,summary_stat,age,max,,,,,,none
+R003,insurance,Median BMI across all policies.,summary_stat,bmi,median,,,,,,none
+R004,insurance,Total children covered across all rows.,summary_stat,children,sum,,,,,,none
+R005,insurance,Average charges by region.,grouped_aggregation,charges,mean,region,,,,,bar
+R006,insurance,Count policies by smoker status.,grouped_aggregation,age,count,smoker,,,,,bar
+R007,insurance,Average BMI by sex.,grouped_aggregation,bmi,mean,sex,,,,,bar
+R008,insurance,Average charges for smokers.,filtered_aggregation,charges,mean,,"[{""column"": ""smoker"", ""operator"": ""=="", ""value"": ""yes""}]",,,,none
+R009,insurance,Count policies where age exceeds 55.,filtered_aggregation,age,count,,"[{""column"": ""age"", ""operator"": "">"", ""value"": 55}]",,,,none
+R010,insurance,Total charges in the southwest region.,filtered_aggregation,charges,sum,,"[{""column"": ""region"", ""operator"": ""=="", ""value"": ""southwest""}]",,,,none
+R011,insurance,Average BMI where region contains south.,filtered_aggregation,bmi,mean,,"[{""column"": ""region"", ""operator"": ""contains"", ""value"": ""south""}]",,,,none
+R012,insurance,Average age for policies with at least two children.,filtered_aggregation,age,mean,,"[{""column"": ""children"", ""operator"": "">="", ""value"": 2}]",,,,none
+R013,yellow_tripdata_2026_01,Mean fare amount across trips.,summary_stat,fare_amount,mean,,,,,,none
+R014,yellow_tripdata_2026_01,Maximum total amount per trip.,summary_stat,total_amount,max,,,,,,none
+R015,yellow_tripdata_2026_01,Median trip distance.,summary_stat,trip_distance,median,,,,,,none
+R016,yellow_tripdata_2026_01,Total fare amount by payment type.,grouped_aggregation,fare_amount,sum,payment_type,,,,,bar
+R017,yellow_tripdata_2026_01,Average tip by vendor ID.,grouped_aggregation,tip_amount,mean,VendorID,,,,,bar
+R018,yellow_tripdata_2026_01,Count trips by rate code.,grouped_aggregation,trip_distance,count,RatecodeID,,,,,bar
+R019,yellow_tripdata_2026_01,Total fare where payment type is credit card (code 1).,filtered_aggregation,fare_amount,sum,,"[{""column"": ""payment_type"", ""operator"": ""=="", ""value"": 1}]",,,,none
+R020,yellow_tripdata_2026_01,Average total amount with at least two passengers.,filtered_aggregation,total_amount,mean,,"[{""column"": ""passenger_count"", ""operator"": "">="", ""value"": 2}]",,,,none
+R021,yellow_tripdata_2026_01,Count trips where trip distance is greater than five miles.,filtered_aggregation,trip_distance,count,,"[{""column"": ""trip_distance"", ""operator"": "">"", ""value"": 5}]",,,,none
+R022,yellow_tripdata_2026_01,Count trips where store and forward flag contains Y.,filtered_aggregation,VendorID,count,,"[{""column"": ""store_and_fwd_flag"", ""operator"": ""contains"", ""value"": ""Y""}]",,,,none
+R023,yellow_tripdata_2026_01,Monthly sum of fare amounts over pickup time.,time_series,fare_amount,sum,,,tpep_pickup_datetime,month,iso_date,line
+R024,yellow_tripdata_2026_01,Weekly average tip amount.,time_series,tip_amount,mean,,,tpep_pickup_datetime,week,iso_date,line
+R025,yellow_tripdata_2026_01,Daily median trip distance.,time_series,trip_distance,median,,,tpep_pickup_datetime,day,iso_date,line
+R026,yellow_tripdata_2026_01,Monthly total trip count proxy by counting trip distance.,time_series,trip_distance,count,,,tpep_pickup_datetime,month,iso_date,line
+R027,online_retail_ii,Mean line quantity per invoice line.,summary_stat,Quantity,mean,,,,,,none
+R028,online_retail_ii,Maximum unit price.,summary_stat,Price,max,,,,,,none
+R029,online_retail_ii,Median unit price.,summary_stat,Price,median,,,,,,none
+R030,online_retail_ii,Total quantity sold by country.,grouped_aggregation,Quantity,sum,Country,,,,,bar
+R031,online_retail_ii,Average price by country.,grouped_aggregation,Price,mean,Country,,,,,bar
+R032,online_retail_ii,Count lines by country.,grouped_aggregation,Quantity,count,Country,,,,,bar
+R033,online_retail_ii,Total quantity for United Kingdom orders.,filtered_aggregation,Quantity,sum,,"[{""column"": ""Country"", ""operator"": ""=="", ""value"": ""United Kingdom""}]",,,,none
+R034,online_retail_ii,Average price where quantity is at least five.,filtered_aggregation,Price,mean,,"[{""column"": ""Quantity"", ""operator"": "">="", ""value"": 5}]",,,,none
+R035,online_retail_ii,Count lines where country contains United.,filtered_aggregation,Invoice,count,,"[{""column"": ""Country"", ""operator"": ""contains"", ""value"": ""United""}]",,,,none
+R036,online_retail_ii,Total price on lines with quantity greater than zero.,filtered_aggregation,Price,sum,,"[{""column"": ""Quantity"", ""operator"": "">"", ""value"": 0}]",,,,none
+R037,online_retail_ii,Monthly sum of quantities over invoice date.,time_series,Quantity,sum,,,InvoiceDate,month,iso_date,line
+R038,online_retail_ii,Weekly average unit price.,time_series,Price,mean,,,InvoiceDate,week,iso_date,line
+R039,online_retail_ii,Daily total quantity.,time_series,Quantity,sum,,,InvoiceDate,day,iso_date,line
+R040,online_retail_ii,Monthly median unit price.,time_series,Price,median,,,InvoiceDate,month,iso_date,line

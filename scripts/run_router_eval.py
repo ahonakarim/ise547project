@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -15,10 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from app.dataset_loader import load_dataset
 from app.llm_router import LLMRouterConfig, parse_question_to_structured_query
 
-BENCHMARK_PATH = ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
-RAW_DATA_DIR = ROOT / "data" / "raw"
+DEFAULT_BENCHMARK_PATH = ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
 OUTPUT_PATH = ROOT / "outputs" / "eval_runs" / "router_eval_results.csv"
 
 
@@ -54,11 +55,7 @@ def _normalize_filters(filters: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def _load_dataset_for_row(row: pd.Series) -> pd.DataFrame:
     dataset_name = str(row["dataset_name"])
-    dataset_path = RAW_DATA_DIR / f"{dataset_name}.csv"
-    if not dataset_path.exists():
-        raise FileNotFoundError(f"Dataset file not found: {dataset_path}")
-
-    df = pd.read_csv(dataset_path)
+    df = load_dataset(dataset_name).copy()
     task_type = str(row["task_type"])
     if task_type == "time_series":
         time_col = _maybe_none(row.get("time_column"))
@@ -74,8 +71,44 @@ def _router_config_with_model(model_name: str) -> LLMRouterConfig:
     return LLMRouterConfig(base_url=base_url, api_key=api_key, model=model_name, timeout_seconds=timeout)
 
 
-def run_eval(model_name: str, prompt_variant: str, limit: int | None) -> pd.DataFrame:
-    bench = pd.read_csv(BENCHMARK_PATH)
+def _exact_match_from_applicable(
+    gold_task: str,
+    *,
+    task_type_correct: bool,
+    metric_column_correct: bool,
+    aggregation_correct: bool,
+    chart_type_correct: bool,
+    groupby_column_correct: Any,
+    filter_correct: Any,
+    time_column_correct: Any,
+    time_granularity_correct: Any,
+) -> bool:
+    """True iff every field that applies to ``gold_task`` matches."""
+    parts: list[bool] = [
+        task_type_correct,
+        metric_column_correct,
+        aggregation_correct,
+        chart_type_correct,
+    ]
+    if gold_task == "grouped_aggregation":
+        parts.append(groupby_column_correct)
+    if gold_task == "filtered_aggregation":
+        parts.append(filter_correct)
+    if gold_task == "time_series":
+        parts.append(time_column_correct)
+        parts.append(time_granularity_correct)
+    return all(parts)
+
+
+def run_eval(
+    model_name: str,
+    prompt_variant: str,
+    limit: int | None,
+    benchmark_path: Path | None = None,
+    sleep_seconds: float = 3.0,
+) -> pd.DataFrame:
+    bench_path = benchmark_path or DEFAULT_BENCHMARK_PATH
+    bench = pd.read_csv(bench_path)
     if limit is not None:
         bench = bench.head(limit)
 
@@ -86,16 +119,17 @@ def run_eval(model_name: str, prompt_variant: str, limit: int | None) -> pd.Data
         question_id = str(row["question_id"])
         dataset_name = str(row["dataset_name"])
         question_text = str(row["question_text"])
+        gold_task = str(row["task_type"])
 
         parse_success = False
         error_message = ""
         task_type_correct = False
         metric_column_correct = False
         aggregation_correct = False
-        groupby_column_correct = False
-        filter_correct = False
-        time_column_correct = False
-        time_granularity_correct = False
+        groupby_column_correct: bool | Any = pd.NA
+        filter_correct: bool | Any = pd.NA
+        time_column_correct: bool | Any = pd.NA
+        time_granularity_correct: bool | Any = pd.NA
         chart_type_correct = False
         exact_match = False
 
@@ -109,7 +143,6 @@ def run_eval(model_name: str, prompt_variant: str, limit: int | None) -> pd.Data
             )
             parse_success = True
 
-            gold_task = str(row["task_type"])
             gold_metric = _maybe_none(row["metric_column"])
             gold_agg = _maybe_none(row["aggregation"])
             gold_group = _maybe_none(row["groupby_column"])
@@ -122,26 +155,57 @@ def run_eval(model_name: str, prompt_variant: str, limit: int | None) -> pd.Data
             task_type_correct = pred.task_type == gold_task
             metric_column_correct = pred.metric_column == gold_metric
             aggregation_correct = pred.aggregation == gold_agg
-            groupby_column_correct = pred.groupby_column == gold_group
-            filter_correct = pred_filters == gold_filters
-            time_column_correct = pred.time_column == gold_time_col
-            time_granularity_correct = pred.time_granularity == gold_time_gran
             chart_type_correct = pred.chart_type == gold_chart
 
-            exact_match = all(
-                [
-                    task_type_correct,
-                    metric_column_correct,
-                    aggregation_correct,
-                    groupby_column_correct,
-                    filter_correct,
-                    time_column_correct,
-                    time_granularity_correct,
-                    chart_type_correct,
-                ]
+            if gold_task == "grouped_aggregation":
+                groupby_column_correct = pred.groupby_column == gold_group
+            else:
+                groupby_column_correct = pd.NA
+
+            if gold_task == "filtered_aggregation":
+                filter_correct = pred_filters == gold_filters
+            else:
+                filter_correct = pd.NA
+
+            if gold_task == "time_series":
+                time_column_correct = pred.time_column == gold_time_col
+                time_granularity_correct = pred.time_granularity == gold_time_gran
+            else:
+                time_column_correct = pd.NA
+                time_granularity_correct = pd.NA
+
+            exact_match = _exact_match_from_applicable(
+                gold_task,
+                task_type_correct=task_type_correct,
+                metric_column_correct=metric_column_correct,
+                aggregation_correct=aggregation_correct,
+                chart_type_correct=chart_type_correct,
+                groupby_column_correct=groupby_column_correct,
+                filter_correct=filter_correct,
+                time_column_correct=time_column_correct,
+                time_granularity_correct=time_granularity_correct,
             )
         except Exception as exc:  # pragma: no cover - runtime/API dependent
             error_message = str(exc)
+            task_type_correct = False
+            metric_column_correct = False
+            aggregation_correct = False
+            chart_type_correct = False
+            exact_match = False
+            if gold_task == "grouped_aggregation":
+                groupby_column_correct = False
+            else:
+                groupby_column_correct = pd.NA
+            if gold_task == "filtered_aggregation":
+                filter_correct = False
+            else:
+                filter_correct = pd.NA
+            if gold_task == "time_series":
+                time_column_correct = False
+                time_granularity_correct = False
+            else:
+                time_column_correct = pd.NA
+                time_granularity_correct = pd.NA
 
         rows.append(
             {
@@ -162,6 +226,8 @@ def run_eval(model_name: str, prompt_variant: str, limit: int | None) -> pd.Data
                 "error_message": error_message,
             }
         )
+        if sleep_seconds > 0:
+            time.sleep(sleep_seconds)
 
     return pd.DataFrame(rows)
 
@@ -176,9 +242,27 @@ def main() -> None:
         help="Prompt variant id.",
     )
     parser.add_argument("--limit", type=int, default=None, help="Optional row limit for quick runs.")
+    parser.add_argument(
+        "--benchmark",
+        type=Path,
+        default=None,
+        help="Benchmark CSV (default: data/benchmarks/benchmark_questions.csv).",
+    )
+    parser.add_argument(
+        "--sleep_seconds",
+        type=float,
+        default=3.0,
+        help="Seconds to sleep between benchmark rows (after each API call) for rate-limit safety.",
+    )
     args = parser.parse_args()
 
-    results_df = run_eval(model_name=args.model, prompt_variant=args.prompt_variant, limit=args.limit)
+    results_df = run_eval(
+        model_name=args.model,
+        prompt_variant=args.prompt_variant,
+        limit=args.limit,
+        benchmark_path=args.benchmark,
+        sleep_seconds=args.sleep_seconds,
+    )
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     results_df.to_csv(OUTPUT_PATH, index=False)
     print(f"Wrote {len(results_df)} rows to {OUTPUT_PATH}")

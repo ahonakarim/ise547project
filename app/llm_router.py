@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from dataclasses import dataclass
 from typing import Any
+from dotenv import load_dotenv
+load_dotenv()
 
 import pandas as pd
 import requests
@@ -68,6 +71,21 @@ def _extract_json_object(text: str) -> dict[str, Any]:
     return parsed
 
 
+def _raise_for_non_ok_chat_completion(response: requests.Response) -> None:
+    """Raise ValueError with HTTP status, raw body, and JSON body when parseable."""
+    status = response.status_code
+    text = response.text
+    parsed_json: Any | None = None
+    try:
+        parsed_json = response.json()
+    except ValueError:
+        pass
+    parts = [f"HTTP {status}", f"response.text={text!r}"]
+    if parsed_json is not None:
+        parts.append(f"response.json={parsed_json!r}")
+    raise ValueError("OpenAI-compatible chat completions error: " + "; ".join(parts))
+
+
 def _chat_completion(prompt: str, config: LLMRouterConfig) -> str:
     """Call OpenAI-compatible chat completion endpoint and return text content."""
     if not config.api_key:
@@ -75,10 +93,10 @@ def _chat_completion(prompt: str, config: LLMRouterConfig) -> str:
 
     url = f"{config.base_url}/chat/completions"
     headers = {
-        "Authorization": f"Bearer {config.api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost",
-        "X-Title": "CSV Analyst Assistant",
+    "Authorization": f"Bearer {config.api_key}",
+    "Content-Type": "application/json",
+    "HTTP-Referer": "http://localhost",
+    "X-OpenRouter-Title": "CSV Analyst Assistant",
     }
     payload = {
         "model": config.model,
@@ -89,8 +107,23 @@ def _chat_completion(prompt: str, config: LLMRouterConfig) -> str:
         ],
     }
 
-    response = requests.post(url, headers=headers, json=payload, timeout=config.timeout_seconds)
-    response.raise_for_status()
+    retries = int(os.getenv("OPENAI_RETRY_ATTEMPTS", "3"))
+    backoff_seconds = float(os.getenv("OPENAI_RETRY_BACKOFF_SECONDS", "1.5"))
+
+    response: requests.Response | None = None
+    for attempt in range(retries + 1):
+        response = requests.post(url, headers=headers, json=payload, timeout=config.timeout_seconds)
+        if response.status_code not in {429, 500, 502, 503, 504}:
+            break
+        if attempt >= retries:
+            break
+        sleep_for = backoff_seconds * (2**attempt)
+        time.sleep(sleep_for)
+
+    if response is None:
+        raise ValueError("No response returned from LLM provider.")
+    if not response.ok:
+        _raise_for_non_ok_chat_completion(response)
     data = response.json()
 
     choices = data.get("choices") or []

@@ -28,12 +28,35 @@ pip install -r requirements.txt
 streamlit run app/main.py
 ```
 
+## Real datasets (insurance, yellow taxi, online retail)
+
+1. Place your files locally (or use the defaults in the materialize script: `~/Downloads/...`).
+2. Materialize canonical CSVs under `data/raw/` (recommended; caps large sources for a laptop-friendly MVP):
+
+```bash
+python scripts/materialize_real_datasets.py \
+  --insurance ~/Downloads/insurance.csv \
+  --yellow-parquet ~/Downloads/yellow_tripdata_2026-01.parquet \
+  --retail-zip ~/Downloads/online_retail_II.csv.zip
+```
+
+This writes `insurance.csv`, `yellow_tripdata_2026_01.csv` (first 100k Parquet rows), and `online_retail_ii.csv` (first 120k lines from the zip). Tune caps with `--yellow-max-rows` / `--retail-max-rows`.
+
+Alternatively, set paths in `.env` (see `.env.example`) so `app.dataset_loader.load_dataset` reads directly from Parquet/zip without copying.
+
+- **Logical dataset ids**: `insurance`, `yellow_tripdata_2026_01`, `online_retail_ii`
+- **Real-data benchmark**: `data/benchmarks/benchmark_questions_real.csv`
+- **Expected answers (real benchmark)**:  
+  `python scripts/generate_expected_answers.py --benchmark data/benchmarks/benchmark_questions_real.csv --output outputs/eval_runs/expected_answers_real.jsonl`
+
+Large materialized CSVs are gitignored by default; small `insurance.csv` and the real benchmark CSV can be committed if you want.
+
 ## Evaluation
 
 This repo includes scripts and data scaffolding for benchmarking the router/intent parsing and end-to-end correctness.
 
-- **Benchmarks input**: `data/benchmarks/benchmark_questions.csv`
-- **Run router-focused eval**: `scripts/run_router_eval.py`
+- **Benchmarks input**: `data/benchmarks/benchmark_questions.csv` (synthetic) or `data/benchmarks/benchmark_questions_real.csv`
+- **Run router-focused eval**: `scripts/run_router_eval.py` (add `--benchmark ...` for the real set)
 - **Run end-to-end eval**: `scripts/run_end_to_end_eval.py`
 - **Outputs**:
   - `outputs/eval_runs/` (structured run artifacts)
@@ -56,4 +79,3 @@ csv-analyst-assistant/
   .gitignore
   .env.example
 ```
-# ise547project

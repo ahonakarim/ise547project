@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Callable
 
 import pandas as pd
+from pandas.api.types import is_datetime64_any_dtype
 
 from app.constants import CHART_VALUE_COLUMN, ERR_EXECUTION
 from app.charts import make_bar_chart, make_line_chart, make_scatter_plot
@@ -172,13 +173,18 @@ def run_time_series(df: pd.DataFrame, query: StructuredQuery) -> BackendResult:
     """Execute time_series aggregation by day/week/month."""
     try:
         working = df.copy()
-        # Validator guarantees datetime compatibility for time_column.
+        tc = query.time_column  # type: ignore[assignment]
+        if tc not in working.columns:
+            return build_error_result("time_column missing from DataFrame.", error_code=ERR_EXECUTION)
+        if not is_datetime64_any_dtype(working[tc]):
+            working[tc] = pd.to_datetime(working[tc], errors="coerce")
+        working = working.dropna(subset=[tc])
         # Pandas 3 uses ME (month-end) instead of the removed M alias.
         freq_map = {"day": "D", "week": "W", "month": "ME"}
         freq = freq_map[query.time_granularity]  # type: ignore[index]
 
         series = (
-            working.set_index(query.time_column)[query.metric_column]  # type: ignore[index]
+            working.set_index(tc)[query.metric_column]  # type: ignore[index]
             .resample(freq)
             .agg(query.aggregation)  # type: ignore[arg-type]
             .dropna()
