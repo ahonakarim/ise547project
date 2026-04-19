@@ -51,6 +51,23 @@ Alternatively, set paths in `.env` (see `.env.example`) so `app.dataset_loader.l
 
 Large materialized CSVs are gitignored by default; small `insurance.csv` and the real benchmark CSV can be committed if you want.
 
+## Frontend (MVP)
+
+The Streamlit frontend lets you:
+
+- upload a CSV file
+- preview the dataset and view basic dataset stats/columns
+- ask a natural-language question (or use example question buttons)
+- view the interpreted structured query
+- view returned outputs (message, scalar value, table, chart when available)
+
+Supported query types are limited to:
+
+- `summary_stat`
+- `grouped_aggregation`
+- `filtered_aggregation`
+- `time_series`
+
 ## Evaluation
 
 This repo includes scripts and data scaffolding for benchmarking the router/intent parsing and end-to-end correctness.
