@@ -66,7 +66,10 @@ data/benchmarks/*.tmp
 !data/raw/sales_data.csv
 !data/raw/insurance_data.csv
 !data/raw/retail_orders.csv
+!data/raw/insurance.csv
+!data/benchmarks/benchmark_questions_real.csv
 !data/processed/.gitkeep
+!data/processed/dataset_schemas.json
 !data/samples/.gitkeep
 
 ### Evaluation artifacts

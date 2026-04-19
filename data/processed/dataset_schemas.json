@@ -1,0 +1,171 @@
+{
+  "datasets": {
+    "insurance": {
+      "dataset_id": "insurance",
+      "source_csv": "data/raw/insurance.csv",
+      "output_csv": "data/processed/insurance_cleaned.csv",
+      "row_count": 1338,
+      "primary_time_column": null,
+      "schema": [
+        {
+          "column": "age",
+          "dtype": "int64"
+        },
+        {
+          "column": "sex",
+          "dtype": "str"
+        },
+        {
+          "column": "bmi",
+          "dtype": "float64"
+        },
+        {
+          "column": "children",
+          "dtype": "int64"
+        },
+        {
+          "column": "smoker",
+          "dtype": "str"
+        },
+        {
+          "column": "region",
+          "dtype": "str"
+        },
+        {
+          "column": "charges",
+          "dtype": "float64"
+        }
+      ]
+    },
+    "yellow_tripdata_2026_01": {
+      "dataset_id": "yellow_tripdata_2026_01",
+      "source_csv": "data/raw/yellow_tripdata_2026_01.csv",
+      "output_csv": "data/processed/yellow_tripdata_2026_01_cleaned.csv",
+      "row_count": 100000,
+      "primary_time_column": "tpep_pickup_datetime",
+      "schema": [
+        {
+          "column": "vendor_id",
+          "dtype": "int64"
+        },
+        {
+          "column": "tpep_pickup_datetime",
+          "dtype": "str"
+        },
+        {
+          "column": "tpep_dropoff_datetime",
+          "dtype": "str"
+        },
+        {
+          "column": "passenger_count",
+          "dtype": "int64"
+        },
+        {
+          "column": "trip_distance",
+          "dtype": "float64"
+        },
+        {
+          "column": "ratecode_id",
+          "dtype": "int64"
+        },
+        {
+          "column": "store_and_fwd_flag",
+          "dtype": "str"
+        },
+        {
+          "column": "pu_location_id",
+          "dtype": "int64"
+        },
+        {
+          "column": "do_location_id",
+          "dtype": "int64"
+        },
+        {
+          "column": "payment_type",
+          "dtype": "int64"
+        },
+        {
+          "column": "fare_amount",
+          "dtype": "float64"
+        },
+        {
+          "column": "extra",
+          "dtype": "float64"
+        },
+        {
+          "column": "mta_tax",
+          "dtype": "float64"
+        },
+        {
+          "column": "tip_amount",
+          "dtype": "float64"
+        },
+        {
+          "column": "tolls_amount",
+          "dtype": "float64"
+        },
+        {
+          "column": "improvement_surcharge",
+          "dtype": "float64"
+        },
+        {
+          "column": "total_amount",
+          "dtype": "float64"
+        },
+        {
+          "column": "congestion_surcharge",
+          "dtype": "float64"
+        },
+        {
+          "column": "airport_fee",
+          "dtype": "float64"
+        },
+        {
+          "column": "cbd_congestion_fee",
+          "dtype": "float64"
+        }
+      ]
+    },
+    "online_retail_ii": {
+      "dataset_id": "online_retail_ii",
+      "source_csv": "data/raw/online_retail_ii.csv",
+      "output_csv": "data/processed/online_retail_ii_cleaned.csv",
+      "row_count": 120000,
+      "primary_time_column": "invoice_date",
+      "schema": [
+        {
+          "column": "invoice",
+          "dtype": "str"
+        },
+        {
+          "column": "stock_code",
+          "dtype": "str"
+        },
+        {
+          "column": "description",
+          "dtype": "str"
+        },
+        {
+          "column": "quantity",
+          "dtype": "int64"
+        },
+        {
+          "column": "invoice_date",
+          "dtype": "str"
+        },
+        {
+          "column": "price",
+          "dtype": "float64"
+        },
+        {
+          "column": "customer_id",
+          "dtype": "float64"
+        },
+        {
+          "column": "country",
+          "dtype": "str"
+        }
+      ]
+    }
+  }
+}

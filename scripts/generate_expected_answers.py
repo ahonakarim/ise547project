@@ -1,8 +1,8 @@
 """Generate expected benchmark outputs using MVP structured-query execution.
 
 This script:
-1) loads benchmark rows from data/benchmarks/benchmark_questions.csv
-2) loads each row's dataset from data/raw/<dataset_name>.csv
+1) loads benchmark rows from a CSV (default: data/benchmarks/benchmark_questions.csv)
+2) loads each row's dataset via ``app.dataset_loader.load_dataset``
 3) converts each row into a StructuredQuery
 4) calls execute_structured_query
 5) writes reproducible outputs with question_id traceability
@@ -10,6 +10,7 @@ This script:
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -24,12 +25,12 @@ if str(ROOT) not in sys.path:
 
 from app.analytics import execute_structured_query
 from app.constants import ERR_EXECUTION, ERR_SCHEMA_VALIDATION
+from app.dataset_loader import load_dataset
 from app.schemas import StructuredQuery
 from app.utils import build_error_result
 
-BENCHMARK_PATH = ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
-RAW_DATA_DIR = ROOT / "data" / "raw"
-OUTPUT_PATH = ROOT / "outputs" / "eval_runs" / "expected_answers.jsonl"
+DEFAULT_BENCHMARK_PATH = ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
+DEFAULT_OUTPUT_PATH = ROOT / "outputs" / "eval_runs" / "expected_answers.jsonl"
 
 
 def _parse_filters(raw_filters: str | float | None) -> list[dict[str, Any]]:
@@ -80,14 +81,6 @@ def _sanitize_result_for_json(result: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def _load_dataset(dataset_name: str) -> pd.DataFrame:
-    """Load dataset CSV from data/raw using dataset_name convention."""
-    dataset_path = RAW_DATA_DIR / f"{dataset_name}.csv"
-    if not dataset_path.exists():
-        raise FileNotFoundError(f"Dataset not found for dataset_name='{dataset_name}': {dataset_path}")
-    return pd.read_csv(dataset_path)
-
-
 def _prepare_dataframe_for_row(df: pd.DataFrame, row: pd.Series) -> pd.DataFrame:
     """Apply row-specific deterministic preprocessing for execution.
 
@@ -113,8 +106,24 @@ def _prepare_dataframe_for_row(df: pd.DataFrame, row: pd.Series) -> pd.DataFrame
 
 def main() -> None:
     """Generate expected answers JSONL for benchmark rows."""
-    benchmark_df = pd.read_csv(BENCHMARK_PATH)
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(description="Generate expected benchmark JSONL outputs.")
+    parser.add_argument(
+        "--benchmark",
+        type=Path,
+        default=DEFAULT_BENCHMARK_PATH,
+        help="Path to benchmark_questions CSV.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=DEFAULT_OUTPUT_PATH,
+        help="Output JSONL path.",
+    )
+    args = parser.parse_args()
+
+    benchmark_df = pd.read_csv(args.benchmark)
+    out_path: Path = args.output
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
     records: list[dict[str, Any]] = []
     for _, row in benchmark_df.iterrows():
@@ -124,7 +133,7 @@ def main() -> None:
         structured_query_payload: dict[str, Any] | None = None
 
         try:
-            df = _prepare_dataframe_for_row(_load_dataset(dataset_name), row)
+            df = _prepare_dataframe_for_row(load_dataset(dataset_name), row)
             query = _query_from_row(row)
             structured_query_payload = query.model_dump()
             result = execute_structured_query(df, query)
@@ -144,11 +153,11 @@ def main() -> None:
             }
         )
 
-    with OUTPUT_PATH.open("w", encoding="utf-8") as f:
+    with out_path.open("w", encoding="utf-8") as f:
         for item in records:
             f.write(json.dumps(item, ensure_ascii=True, default=str) + "\n")
 
-    print(f"Wrote {len(records)} expected outputs to {OUTPUT_PATH}")
+    print(f"Wrote {len(records)} expected outputs to {out_path}")
 
 
 if __name__ == "__main__":
