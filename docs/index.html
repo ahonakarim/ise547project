@@ -158,48 +158,18 @@
         padding-left: 1rem;
         margin-top: 1rem;
       }
-      /* Embedded interactive app */
-      .interactive-head {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
+      .launch-row {
+        margin-top: 1rem;
       }
-      .interactive-head h2 {
-        margin: 0;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+      .launch-row .btn-primary {
+        font-size: 1.05rem;
+        padding: 0.75rem 1.35rem;
+      }
+      .app-url-line {
+        margin: 0.75rem 0 0;
+        font-size: 0.85rem;
         color: var(--muted);
-        font-weight: 600;
-      }
-      .embed-box {
-        position: relative;
-        width: 100%;
-        min-height: 720px;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid var(--border);
-        background: var(--surface);
-      }
-      .embed-box iframe {
-        display: block;
-        width: 100%;
-        height: min(85vh, 900px);
-        border: 0;
-      }
-      .embed-placeholder {
-        padding: 2rem 1.5rem;
-        text-align: center;
-        color: var(--muted);
-      }
-      .embed-placeholder code {
-        display: block;
-        margin-top: 0.75rem;
         word-break: break-all;
-        text-align: left;
       }
       footer {
         margin-top: 2.5rem;
@@ -212,8 +182,7 @@
   </head>
   <body>
     <!--
-      INTERACTIVE APP: GitHub Pages cannot run Python. Deploy Streamlit elsewhere, then paste the public URL below.
-      Examples: https://your-app.streamlit.app  |  https://your-name-your-space.hf.space (Hugging Face Spaces)
+      Public Streamlit URL (button + script). Do not iframe Streamlit Cloud here — it redirects and breaks embeds.
     -->
     <script>
       window.REMOTE_INTERACTIVE_APP_URL = "https://ise547project.streamlit.app";
@@ -241,34 +210,34 @@
       </div>
 
       <div class="card" id="interactive">
-        <div class="interactive-head">
-          <h2>Interactive app</h2>
-          <div class="cta-row" style="margin: 0">
-            <a class="btn btn-primary" id="open-app-tab" href="#" rel="noopener noreferrer" style="display: none"
-              >Open app in new tab</a
-            >
-          </div>
-        </div>
-        <p class="note" style="margin-top: 0; margin-bottom: 1rem">
-          This page embeds your hosted Streamlit app. This site only serves HTML; the UI runs on
-          <a href="https://streamlit.io/cloud" rel="noopener noreferrer">Streamlit Cloud</a> or
-          <a href="https://huggingface.co/docs/hub/spaces-sdks-streamlit" rel="noopener noreferrer">Hugging Face</a>.
-          Set <code>window.REMOTE_INTERACTIVE_APP_URL</code> near the top of this file after you deploy.
+        <h2>Interactive app</h2>
+        <p class="note" style="margin-top: 0">
+          This site is static (GitHub Pages). The live UI runs on
+          <a href="https://streamlit.io/cloud" rel="noopener noreferrer">Streamlit Cloud</a>.
+          <strong>Embedding Streamlit in an iframe often fails</strong> (redirect loops via
+          <code>share.streamlit.io</code>, cookies, or security headers), so we open the app in a <strong>new tab</strong>
+          instead.
         </p>
-        <div class="embed-box" id="embed-container">
-          <div class="embed-placeholder" id="embed-placeholder">
-            <strong>No deployed URL yet.</strong>
-            Deploy <code>app/main.py</code> to Streamlit Community Cloud or Hugging Face Spaces, copy the public HTTPS
-            URL, assign it to <code>window.REMOTE_INTERACTIVE_APP_URL</code> in <code>docs/index.html</code>, commit, and
-            push. The iframe below will load your app on this same site.
-            <code>REMOTE_INTERACTIVE_APP_URL = "https://...."</code>
-          </div>
-          <iframe id="app-frame" title="CSV Analyst Assistant interactive app" style="display: none"></iframe>
+        <div class="launch-row cta-row">
+          <a
+            class="btn btn-primary"
+            id="open-app-tab"
+            href="https://ise547project.streamlit.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Launch Streamlit app (new tab)</a
+          >
         </div>
+        <p class="app-url-line" id="app-url-display"></p>
       </div>
 
       <div class="card">
         <h2>What it does</h2>
+        <p class="note" style="margin-top: 0; margin-bottom: 0.75rem">
+          The Streamlit app loads the same logical datasets as benchmarks and scripts:
+          <code>data/processed/&lt;id&gt;_cleaned.csv</code> if present, else <code>data/raw/&lt;id&gt;.csv</code>, else
+          optional large-file paths from <code>.env</code> (see README).
+        </p>
         <ul>
           <li>Summary statistics (mean, max, count, …)</li>
           <li>Grouped aggregations (e.g. by region, category)</li>
@@ -316,15 +285,12 @@
     <script>
       (function () {
         var url = (window.REMOTE_INTERACTIVE_APP_URL || "").trim();
-        var frame = document.getElementById("app-frame");
-        var placeholder = document.getElementById("embed-placeholder");
         var openTab = document.getElementById("open-app-tab");
-        if (!url) return;
-        placeholder.style.display = "none";
-        frame.style.display = "block";
-        frame.src = url;
-        openTab.href = url;
-        openTab.style.display = "inline-block";
+        var line = document.getElementById("app-url-display");
+        if (url && openTab) {
+          openTab.href = url;
+          if (line) line.textContent = "URL: " + url;
+        }
       })();
     </script>
   </body>

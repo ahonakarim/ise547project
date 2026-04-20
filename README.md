@@ -4,6 +4,7 @@ A Python + Streamlit app that helps you analyze CSV files by translating user qu
 
 ## Overview
 
+- **Interactive UI**: Streamlit only (`streamlit run app/main.py`). Deploy that app to [Streamlit Community Cloud](https://streamlit.io/cloud); the GitHub Pages site in `docs/` is a static landing page with a link to the live app (GitHub Pages cannot run Python).
 - **What it does**: Upload a CSV, ask natural-language questions, get computed answers + charts.
 - **How it works**: LLM → structured intent → validation/safety checks → Pandas execution → formatted results.
 - **Why structured**: Reduces hallucinations and makes evaluation repeatable.
@@ -34,11 +35,11 @@ The **public project website** is hosted on **GitHub Pages** from `docs/index.ht
 
 `https://ahonakarim.github.io/ise547project/`
 
-That page can **embed** the interactive Streamlit UI in an iframe. GitHub Pages still does not run Python; you must deploy the app to [Streamlit Community Cloud](https://streamlit.io/cloud) or [Hugging Face Spaces](https://huggingface.co/docs/hub/spaces-sdks-streamlit), then in `docs/index.html` set:
+That page links to the Streamlit app in a **new tab** (embedding Streamlit Cloud in an iframe usually fails with redirect errors). GitHub Pages still does not run Python; deploy the app to [Streamlit Community Cloud](https://streamlit.io/cloud), then in `docs/index.html` set:
 
 `window.REMOTE_INTERACTIVE_APP_URL = "https://your-app.streamlit.app";`
 
-(use your real URL, commit, and push). If the iframe is blocked by the host’s security headers, use **Open app in new tab** on the site.
+(use your real URL, commit, and push). The **Launch Streamlit app** button uses that URL.
 
 1. Push the `main` branch to GitHub (`https://github.com/ahonakarim/ise547project`).
 2. **Before the first workflow run**, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**, then **Save**. (If you skip this, deployment fails because GitHub has not registered a Pages site for the repository yet.)

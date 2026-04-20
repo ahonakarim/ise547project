@@ -20,6 +20,7 @@ import streamlit as st
 
 from app.analytics import execute_structured_query
 from app.constants import DEFAULT_PREVIEW_ROWS, PROMPT_VARIANTS
+from app.dataset_loader import load_dataset
 from app.llm_router import LLMRouterConfig, parse_question_to_structured_query
 from app.schemas import StructuredQuery
 from app.validator import validate_structured_query
@@ -68,30 +69,31 @@ def _render_examples() -> None:
             st.rerun()
 
 
-def _load_uploaded_csv() -> pd.DataFrame | None:
-    """Load selected dataset from processed path, then raw path."""
+def _load_selected_dataset() -> pd.DataFrame | None:
+    """Load the selected dataset using the same resolution rules as ``dataset_loader.load_dataset``."""
     dataset_name = st.selectbox("Choose a dataset", SUPPORTED_DATASETS)
     st.session_state["selected_dataset"] = dataset_name
 
-    processed_path = REPO_ROOT / "data" / "processed" / f"{dataset_name}.csv"
-    processed_cleaned_path = REPO_ROOT / "data" / "processed" / f"{dataset_name}_cleaned.csv"
-    raw_path = REPO_ROOT / "data" / "raw" / f"{dataset_name}.csv"
-    candidates = [processed_path, processed_cleaned_path, raw_path]
-
-    chosen_path = next((path for path in candidates if path.exists()), None)
-    if chosen_path is None:
-        _render_error(f"Dataset file not found for '{dataset_name}'.")
+    try:
+        df = load_dataset(dataset_name).copy()
+    except FileNotFoundError as exc:
+        _render_error(str(exc))
+        return None
+    except Exception:
+        _render_error("Could not load the selected dataset.")
         return None
 
+    st.caption(
+        "Resolution order: `data/processed/<id>_cleaned.csv` → `data/raw/<id>.csv` → "
+        "optional `.env` paths for large sources (see README / `.env.example`)."
+    )
     try:
-        st.caption(f"Source: `{chosen_path.relative_to(REPO_ROOT)}`")
-        df = pd.read_csv(chosen_path, low_memory=False)
         time_col = _DATASET_META[dataset_name]["time_column"]
         if time_col and time_col in df.columns:
             df[time_col] = pd.to_datetime(df[time_col], errors="coerce")
         return df
     except Exception:
-        _render_error("Could not read the selected dataset file.")
+        _render_error("Could not prepare the selected dataset.")
         return None
 
 
@@ -159,7 +161,7 @@ def main() -> None:
     st.divider()
 
     st.header("1) Select Dataset")
-    df = _load_uploaded_csv()
+    df = _load_selected_dataset()
     if df is None:
         st.info("Select a dataset to begin.")
         return
