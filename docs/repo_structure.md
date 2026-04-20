@@ -3,7 +3,7 @@
 ## 1. Repository Tree (Target Structure)
 
 ```text
-csv-analyst-assistant/
+ise547project/
 README.md
 requirements.txt
 .gitignore

@@ -30,13 +30,13 @@ streamlit run app/main.py
 
 ## Project website (GitHub Pages)
 
-This repository includes a **static** landing page under `docs/` that you can host for free on **GitHub Pages** (HTML and CSS only; it cannot run Streamlit).
+This repository (**`ahonakarim/ise547project`**) includes a **static** landing page under `docs/` that you can host for free on **GitHub Pages** (HTML and CSS only; it cannot run Streamlit).
 
-1. Push the `main` branch to GitHub.
+1. Push the `main` branch to GitHub (`https://github.com/ahonakarim/ise547project`).
 2. **Before the first workflow run**, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**, then **Save**. (If you skip this, deployment fails because GitHub has not registered a Pages site for the repository yet.)
 3. The workflow `.github/workflows/deploy-github-pages.yml` publishes `docs/` on each push. After a successful run, the site is available at:
 
-   `https://<your-username>.github.io/<repository-name>/`
+   `https://ahonakarim.github.io/ise547project/`
 
 The interactive Streamlit app still needs a Python host (for example [Streamlit Community Cloud](https://streamlit.io/cloud)). Edit `docs/index.html` to add a prominent link once your app URL is live.
 
@@ -95,7 +95,7 @@ This repo includes scripts and data scaffolding for benchmarking the router/inte
 ## Repository structure
 
 ```
-csv-analyst-assistant/
+ise547project/
   app/                      # Streamlit app + core logic
   data/                     # raw/processed/benchmarks
   docs/                     # scope and evaluation docs

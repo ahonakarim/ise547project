@@ -134,6 +134,12 @@
           You are viewing the <strong>static project page</strong> hosted on GitHub Pages. It can show
           documentation and links only; it cannot run the Python or Streamlit server.
         </p>
+        <p>
+          Repository: <strong>ahonakarim/ise547project</strong> — canonical Pages URL:
+          <a href="https://ahonakarim.github.io/ise547project/" rel="noopener noreferrer"
+            >ahonakarim.github.io/ise547project</a
+          >
+        </p>
       </div>
 
       <div class="card">
@@ -162,12 +168,11 @@
 
       <div class="card">
         <h2>Source code</h2>
+        <p>Clone or browse the project repository on GitHub.</p>
         <p>
-          Clone or browse the repository on GitHub. Replace the link below with your fork if needed (search for
-          <code>YOUR_REPO_URL</code> in this file).
-        </p>
-        <p>
-          <a id="repo-link" href="https://github.com/YOUR_USERNAME/YOUR_REPO">View repository on GitHub</a>
+          <a href="https://github.com/ahonakarim/ise547project" rel="noopener noreferrer"
+            >github.com/ahonakarim/ise547project</a
+          >
         </p>
       </div>
 
@@ -188,19 +193,5 @@
         </p>
       </footer>
     </div>
-    <script>
-      (function () {
-        var a = document.getElementById("repo-link");
-        if (!a || !a.getAttribute("href").includes("YOUR_USERNAME")) return;
-        if (!location.hostname.endsWith("github.io")) return;
-        var owner = location.hostname.replace(/\.github\.io$/i, "");
-        var parts = location.pathname.split("/").filter(Boolean);
-        var repo = parts[0];
-        if (owner && repo) {
-          a.href = "https://github.com/" + owner + "/" + repo;
-          a.textContent = "View " + repo + " on GitHub";
-        }
-      })();
-    </script>
   </body>
 </html>

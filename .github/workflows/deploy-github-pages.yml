@@ -1,4 +1,4 @@
-# Publishes docs/ at https://<owner>.github.io/<repo>/
+# Publishes docs/ at https://ahonakarim.github.io/ise547project/
 #
 # One-time (required before the first deploy succeeds):
 #   Repository → Settings → Pages → Build and deployment → Source: "GitHub Actions" → Save.
