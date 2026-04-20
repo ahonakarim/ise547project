@@ -20,7 +20,7 @@ from app.dataset_loader import load_dataset
 from app.llm_router import LLMRouterConfig, parse_question_to_structured_query
 
 DEFAULT_BENCHMARK_PATH = ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
-OUTPUT_PATH = ROOT / "outputs" / "eval_runs" / "router_eval_results.csv"
+DEFAULT_OUTPUT_PATH = ROOT / "outputs" / "eval_runs" / "router_eval_results.csv"
 
 
 def _maybe_none(value: Any) -> Any:
@@ -254,6 +254,12 @@ def main() -> None:
         default=3.0,
         help="Seconds to sleep between benchmark rows (after each API call) for rate-limit safety.",
     )
+    parser.add_argument(
+        "--output_path",
+        type=Path,
+        default=None,
+        help="Optional CSV path for results (default: outputs/eval_runs/router_eval_results.csv).",
+    )
     args = parser.parse_args()
 
     results_df = run_eval(
@@ -263,9 +269,10 @@ def main() -> None:
         benchmark_path=args.benchmark,
         sleep_seconds=args.sleep_seconds,
     )
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    results_df.to_csv(OUTPUT_PATH, index=False)
-    print(f"Wrote {len(results_df)} rows to {OUTPUT_PATH}")
+    output_path = args.output_path or DEFAULT_OUTPUT_PATH
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    results_df.to_csv(output_path, index=False)
+    print(f"Wrote {len(results_df)} rows to {output_path}")
 
 
 if __name__ == "__main__":

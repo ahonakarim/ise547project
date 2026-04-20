@@ -71,6 +71,10 @@ data/benchmarks/*.tmp
 !data/processed/.gitkeep
 !data/processed/dataset_schemas.json
 !data/samples/.gitkeep
+# Allow CSV datasets
+!data/raw/*.csv
+!data/processed/*.csv
+!data/samples/*.csv
 
 ### Evaluation artifacts
 outputs/eval_runs/*

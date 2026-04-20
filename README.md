@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ## Running the app
 
 ```bash
-streamlit run app/main.py
+streamlit run app/streamlit_app.py
 ```
 
 ## Real datasets (insurance, yellow taxi, online retail)

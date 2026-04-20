@@ -31,7 +31,7 @@ def _env_config() -> LLMRouterConfig:
     """Load router configuration from environment variables."""
     base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
     api_key = os.getenv("OPENAI_API_KEY", "")
-    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    model = os.getenv("OPENAI_MODEL", "anthropic/claude-3-haiku")
     timeout_seconds = int(os.getenv("OPENAI_TIMEOUT_SECONDS", "45"))
     return LLMRouterConfig(
         base_url=base_url.rstrip("/"),
