@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CSV Analyst Assistant</title>
+    <title>CSV Analyst Assistant — ISE 547</title>
     <meta
       name="description"
-      content="Natural-language questions to structured analytics: validated Pandas execution for CSV data."
+      content="Natural-language questions to structured analytics: validated Pandas execution for CSV data. Official project site."
     />
     <style>
       :root {
@@ -18,6 +18,7 @@
         --accent: #3b82f6;
         --accent-hover: #60a5fa;
         --border: #2d3a4d;
+        --ok: #22c55e;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, sans-serif;
         line-height: 1.6;
       }
@@ -39,20 +40,58 @@
         color: var(--text);
       }
       .wrap {
-        max-width: 44rem;
+        max-width: 46rem;
         margin: 0 auto;
         padding: 2.5rem 1.25rem 4rem;
       }
+      .site-label {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ok);
+        margin-bottom: 0.75rem;
+      }
       h1 {
-        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        font-size: clamp(1.75rem, 4vw, 2.35rem);
         font-weight: 700;
         letter-spacing: -0.02em;
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.75rem;
+        line-height: 1.2;
       }
       .lead {
         font-size: 1.125rem;
         color: var(--muted);
-        margin: 0 0 2rem;
+        margin: 0 0 1.75rem;
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      .btn {
+        display: inline-block;
+        padding: 0.6rem 1.15rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none !important;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff !important;
+      }
+      .btn-primary:hover {
+        filter: brightness(1.08);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--text) !important;
+        border: 1px solid var(--border);
+      }
+      .btn-secondary:hover {
+        background: rgba(127, 127, 127, 0.12);
       }
       .card {
         background: var(--surface);
@@ -96,19 +135,25 @@
       li {
         margin: 0.35rem 0;
       }
-      .btn {
-        display: inline-block;
-        margin-top: 0.5rem;
-        padding: 0.55rem 1rem;
-        border-radius: 8px;
-        background: var(--accent);
-        color: #fff !important;
-        font-weight: 600;
-        text-decoration: none !important;
+      .flow {
+        display: grid;
+        gap: 0.5rem;
+        margin: 0.5rem 0 0;
+        font-size: 0.95rem;
       }
-      .btn:hover {
-        filter: brightness(1.08);
-        text-decoration: none !important;
+      .flow span {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        border: 1px dashed var(--border);
+        color: var(--muted);
+      }
+      .note {
+        font-size: 0.875rem;
+        color: var(--muted);
+        border-left: 3px solid var(--border);
+        padding-left: 1rem;
+        margin-top: 1rem;
       }
       footer {
         margin-top: 2.5rem;
@@ -121,75 +166,83 @@
   </head>
   <body>
     <div class="wrap">
+      <p class="site-label">Official project website</p>
       <h1>CSV Analyst Assistant</h1>
       <p class="lead">
-        Ask questions about tabular data in plain English. The app maps each question to a
-        <strong>structured query</strong>, validates it against your dataset, and runs
-        <strong>deterministic Pandas</strong> code (no arbitrary model-generated execution).
+        A course project that turns plain-English questions about CSV data into a <strong>structured query</strong>,
+        validates it against the dataset, and runs <strong>deterministic Pandas</strong> code. The language model is
+        used for intent parsing only; execution stays in audited backend code.
       </p>
 
-      <div class="card">
-        <h2>GitHub Pages (this site)</h2>
-        <p>
-          You are viewing the <strong>static project page</strong> hosted on GitHub Pages. It can show
-          documentation and links only; it cannot run the Python or Streamlit server.
-        </p>
-        <p>
-          Repository: <strong>ahonakarim/ise547project</strong> — canonical Pages URL:
-          <a href="https://ahonakarim.github.io/ise547project/" rel="noopener noreferrer"
-            >ahonakarim.github.io/ise547project</a
-          >
-        </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/ahonakarim/ise547project" rel="noopener noreferrer"
+          >View source on GitHub</a
+        >
+        <a
+          class="btn btn-secondary"
+          href="https://github.com/ahonakarim/ise547project/blob/main/README.md"
+          rel="noopener noreferrer"
+          >README &amp; setup</a
+        >
       </div>
 
       <div class="card">
-        <h2>Run the interactive app</h2>
-        <p>The Streamlit UI needs a Python host. Free options:</p>
+        <h2>What it does</h2>
         <ul>
-          <li>
-            <a href="https://streamlit.io/cloud" rel="noopener noreferrer">Streamlit Community Cloud</a>
-            (connect this repo, entrypoint <code>app/main.py</code>, add secrets for API keys if needed)
-          </li>
-          <li>
-            <a href="https://huggingface.co/docs/hub/spaces-sdks-streamlit" rel="noopener noreferrer"
-              >Hugging Face Spaces</a
-            >
-            (Streamlit SDK)
-          </li>
-          <li>Your laptop: <code>pip install -r requirements.txt</code> then <code>streamlit run app/main.py</code></li>
+          <li>Summary statistics (mean, max, count, …)</li>
+          <li>Grouped aggregations (e.g. by region, category)</li>
+          <li>Filtered aggregations (conditions on columns)</li>
+          <li>Time series at day, week, or month granularity</li>
         </ul>
-        <p>
-          After deployment, add your public Streamlit (or other) URL here by editing
-          <code>docs/index.html</code> in the repository.
-        </p>
-        <!-- Optional: set href to your deployed app -->
-        <a class="btn" href="https://streamlit.io/cloud" rel="noopener noreferrer">Open Streamlit Cloud</a>
       </div>
 
       <div class="card">
-        <h2>Source code</h2>
-        <p>Clone or browse the project repository on GitHub.</p>
+        <h2>How it works</h2>
+        <div class="flow">
+          <span>1. User question → LLM produces JSON matching a fixed schema</span>
+          <span>2. Validator checks columns, types, and task rules</span>
+          <span>3. Pandas runs the approved operation; charts use Matplotlib in the UI layer</span>
+        </div>
+        <p class="note">
+          <strong>This website</strong> (<code>ahonakarim.github.io/ise547project</code>) is the public project home:
+          overview, links, and documentation. It is hosted on
+          <a href="https://pages.github.com/" rel="noopener noreferrer">GitHub Pages</a>, which serves static files
+          only. The interactive query UI ships with the repository as a Python app (Streamlit) and runs on your machine
+          or any host that can execute Python (see the README). That is a separate deployment from this site, not a
+          replacement for it.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Repository &amp; evaluation</h2>
         <p>
+          All code, benchmarks, and evaluation scripts live in
           <a href="https://github.com/ahonakarim/ise547project" rel="noopener noreferrer"
-            >github.com/ahonakarim/ise547project</a
-          >
+            ><strong>ahonakarim/ise547project</strong></a
+          >.
+        </p>
+        <p>
+          Benchmarks: <code>data/benchmarks/</code>. Scripts: <code>scripts/</code>. Full setup:
+          <code>README.md</code>.
         </p>
       </div>
 
       <div class="card">
-        <h2>What it supports</h2>
-        <ul>
-          <li>Summary statistics</li>
-          <li>Grouped aggregations</li>
-          <li>Filtered aggregations</li>
-          <li>Time series (day / week / month)</li>
-        </ul>
+        <h2>Run the interactive UI (optional)</h2>
+        <p>For graders or demos who want the live Streamlit interface, clone the repo and run locally:</p>
+        <p><code>pip install -r requirements.txt</code> then <code>streamlit run app/main.py</code></p>
+        <p>
+          You can also deploy that same app to
+          <a href="https://streamlit.io/cloud" rel="noopener noreferrer">Streamlit Community Cloud</a> or
+          <a href="https://huggingface.co/docs/hub/spaces-sdks-streamlit" rel="noopener noreferrer">Hugging Face Spaces</a
+          >; that is an optional companion to this site, not the primary project URL.
+        </p>
       </div>
 
       <footer>
         <p>
-          Evaluation scripts and benchmarks live in the repo under <code>data/benchmarks/</code> and
-          <code>scripts/</code>. See <code>README.md</code> for full setup.
+          CSV Analyst Assistant · ISE 547 ·
+          <a href="https://github.com/ahonakarim/ise547project" rel="noopener noreferrer">GitHub</a>
         </p>
       </footer>
     </div>
