@@ -28,6 +28,18 @@ pip install -r requirements.txt
 streamlit run app/main.py
 ```
 
+## Project website (GitHub Pages)
+
+This repository includes a **static** landing page under `docs/` that you can host for free on **GitHub Pages** (HTML and CSS only; it cannot run Streamlit).
+
+1. Push the `main` branch to GitHub.
+2. In the repository: **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**.
+3. The workflow `.github/workflows/deploy-github-pages.yml` publishes `docs/` on each push. After the first successful run, the site is available at:
+
+   `https://<your-username>.github.io/<repository-name>/`
+
+The interactive Streamlit app still needs a Python host (for example [Streamlit Community Cloud](https://streamlit.io/cloud)). Edit `docs/index.html` to add a prominent link once your app URL is live.
+
 ## Real datasets (insurance, yellow taxi, online retail)
 
 1. Place your files locally (or use the defaults in the materialize script: `~/Downloads/...`).
@@ -55,7 +67,7 @@ Large materialized CSVs are gitignored by default; small `insurance.csv` and the
 
 The Streamlit frontend lets you:
 
-- upload a CSV file
+- choose a built-in dataset (processed or raw CSV under `data/`)
 - preview the dataset and view basic dataset stats/columns
 - ask a natural-language question (or use example question buttons)
 - view the interpreted structured query
