@@ -40,7 +40,7 @@
         color: var(--text);
       }
       .wrap {
-        max-width: 46rem;
+        max-width: 52rem;
         margin: 0 auto;
         padding: 2.5rem 1.25rem 4rem;
       }
@@ -77,6 +77,9 @@
         border-radius: 8px;
         font-weight: 600;
         text-decoration: none !important;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
       }
       .btn-primary {
         background: var(--accent);
@@ -155,6 +158,49 @@
         padding-left: 1rem;
         margin-top: 1rem;
       }
+      /* Embedded interactive app */
+      .interactive-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+      .interactive-head h2 {
+        margin: 0;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .embed-box {
+        position: relative;
+        width: 100%;
+        min-height: 720px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .embed-box iframe {
+        display: block;
+        width: 100%;
+        height: min(85vh, 900px);
+        border: 0;
+      }
+      .embed-placeholder {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        color: var(--muted);
+      }
+      .embed-placeholder code {
+        display: block;
+        margin-top: 0.75rem;
+        word-break: break-all;
+        text-align: left;
+      }
       footer {
         margin-top: 2.5rem;
         padding-top: 1.5rem;
@@ -165,6 +211,14 @@
     </style>
   </head>
   <body>
+    <!--
+      INTERACTIVE APP: GitHub Pages cannot run Python. Deploy Streamlit elsewhere, then paste the public URL below.
+      Examples: https://your-app.streamlit.app  |  https://your-name-your-space.hf.space (Hugging Face Spaces)
+    -->
+    <script>
+      window.REMOTE_INTERACTIVE_APP_URL = "";
+    </script>
+
     <div class="wrap">
       <p class="site-label">Official project website</p>
       <h1>CSV Analyst Assistant</h1>
@@ -186,6 +240,33 @@
         >
       </div>
 
+      <div class="card" id="interactive">
+        <div class="interactive-head">
+          <h2>Interactive app</h2>
+          <div class="cta-row" style="margin: 0">
+            <a class="btn btn-primary" id="open-app-tab" href="#" rel="noopener noreferrer" style="display: none"
+              >Open app in new tab</a
+            >
+          </div>
+        </div>
+        <p class="note" style="margin-top: 0; margin-bottom: 1rem">
+          This page embeds your hosted Streamlit app. This site only serves HTML; the UI runs on
+          <a href="https://streamlit.io/cloud" rel="noopener noreferrer">Streamlit Cloud</a> or
+          <a href="https://huggingface.co/docs/hub/spaces-sdks-streamlit" rel="noopener noreferrer">Hugging Face</a>.
+          Set <code>window.REMOTE_INTERACTIVE_APP_URL</code> near the top of this file after you deploy.
+        </p>
+        <div class="embed-box" id="embed-container">
+          <div class="embed-placeholder" id="embed-placeholder">
+            <strong>No deployed URL yet.</strong>
+            Deploy <code>app/main.py</code> to Streamlit Community Cloud or Hugging Face Spaces, copy the public HTTPS
+            URL, assign it to <code>window.REMOTE_INTERACTIVE_APP_URL</code> in <code>docs/index.html</code>, commit, and
+            push. The iframe below will load your app on this same site.
+            <code>REMOTE_INTERACTIVE_APP_URL = "https://...."</code>
+          </div>
+          <iframe id="app-frame" title="CSV Analyst Assistant interactive app" style="display: none"></iframe>
+        </div>
+      </div>
+
       <div class="card">
         <h2>What it does</h2>
         <ul>
@@ -203,14 +284,6 @@
           <span>2. Validator checks columns, types, and task rules</span>
           <span>3. Pandas runs the approved operation; charts use Matplotlib in the UI layer</span>
         </div>
-        <p class="note">
-          <strong>This website</strong> (<code>ahonakarim.github.io/ise547project</code>) is the public project home:
-          overview, links, and documentation. It is hosted on
-          <a href="https://pages.github.com/" rel="noopener noreferrer">GitHub Pages</a>, which serves static files
-          only. The interactive query UI ships with the repository as a Python app (Streamlit) and runs on your machine
-          or any host that can execute Python (see the README). That is a separate deployment from this site, not a
-          replacement for it.
-        </p>
       </div>
 
       <div class="card">
@@ -228,15 +301,8 @@
       </div>
 
       <div class="card">
-        <h2>Run the interactive UI (optional)</h2>
-        <p>For graders or demos who want the live Streamlit interface, clone the repo and run locally:</p>
+        <h2>Run locally</h2>
         <p><code>pip install -r requirements.txt</code> then <code>streamlit run app/main.py</code></p>
-        <p>
-          You can also deploy that same app to
-          <a href="https://streamlit.io/cloud" rel="noopener noreferrer">Streamlit Community Cloud</a> or
-          <a href="https://huggingface.co/docs/hub/spaces-sdks-streamlit" rel="noopener noreferrer">Hugging Face Spaces</a
-          >; that is an optional companion to this site, not the primary project URL.
-        </p>
       </div>
 
       <footer>
@@ -246,5 +312,20 @@
         </p>
       </footer>
     </div>
+
+    <script>
+      (function () {
+        var url = (window.REMOTE_INTERACTIVE_APP_URL || "").trim();
+        var frame = document.getElementById("app-frame");
+        var placeholder = document.getElementById("embed-placeholder");
+        var openTab = document.getElementById("open-app-tab");
+        if (!url) return;
+        placeholder.style.display = "none";
+        frame.style.display = "block";
+        frame.src = url;
+        openTab.href = url;
+        openTab.style.display = "inline-block";
+      })();
+    </script>
   </body>
 </html>

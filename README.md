@@ -34,7 +34,11 @@ The **public project website** is hosted on **GitHub Pages** from `docs/index.ht
 
 `https://ahonakarim.github.io/ise547project/`
 
-That URL is the intended “course website” link. The **Streamlit** UI in `app/main.py` is the interactive demo; it runs wherever Python is available (locally or on [Streamlit Community Cloud](https://streamlit.io/cloud)) and is separate from Pages.
+That page can **embed** the interactive Streamlit UI in an iframe. GitHub Pages still does not run Python; you must deploy the app to [Streamlit Community Cloud](https://streamlit.io/cloud) or [Hugging Face Spaces](https://huggingface.co/docs/hub/spaces-sdks-streamlit), then in `docs/index.html` set:
+
+`window.REMOTE_INTERACTIVE_APP_URL = "https://your-app.streamlit.app";`
+
+(use your real URL, commit, and push). If the iframe is blocked by the host’s security headers, use **Open app in new tab** on the site.
 
 1. Push the `main` branch to GitHub (`https://github.com/ahonakarim/ise547project`).
 2. **Before the first workflow run**, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**, then **Save**. (If you skip this, deployment fails because GitHub has not registered a Pages site for the repository yet.)
