@@ -31,16 +31,7 @@ SUPPORTED_DATASETS: list[str] = [
     "insurance",
 ]
 
-EXAMPLE_QUESTIONS: list[str] = [
-    "What is the average value of sales?",
-    "Show total revenue by region.",
-    "What is the average charge for smokers?",
-    "Show monthly trends of revenue over time.",
-    "What is the average charges?",
-    "What is the total quantity by country?",
-    "What is the average fare_amount where trip_distance > 5?",
-    "What is the weekly total fare_amount over time?",
-]
+_BENCHMARK_QUESTIONS_CSV = REPO_ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
 
 # Primary time column per dataset (snake_case, aligned with processed CSVs); None when absent.
 _DATASET_META: dict[str, dict[str, Any]] = {
@@ -61,11 +52,41 @@ def _render_error(message: str) -> None:
     st.error(message)
 
 
-def _render_examples() -> None:
+@st.cache_data(show_spinner=False)
+def _load_benchmark_question_rows() -> pd.DataFrame:
+    """All benchmark rows (sorted by numeric question id)."""
+    if not _BENCHMARK_QUESTIONS_CSV.is_file():
+        return pd.DataFrame(columns=["question_id", "dataset_name", "question_text"])
+    df = pd.read_csv(
+        _BENCHMARK_QUESTIONS_CSV,
+        usecols=["question_id", "dataset_name", "question_text"],
+    )
+    df["_ord"] = df["question_id"].astype(str).str.replace("Q", "", regex=False).astype(int)
+    return df.sort_values("_ord", kind="stable").drop(columns=["_ord"])
+
+
+def _example_questions_for_dataset(dataset_name: str) -> list[tuple[str, str]]:
+    """(question_id, question_text) pairs for ``dataset_name`` from the benchmark CSV."""
+    df = _load_benchmark_question_rows()
+    if df.empty:
+        return []
+    sub = df[df["dataset_name"] == dataset_name]
+    return list(zip(sub["question_id"].astype(str), sub["question_text"].astype(str)))
+
+
+def _render_examples(dataset_name: str) -> None:
     st.subheader("Example questions")
-    for i, q in enumerate(EXAMPLE_QUESTIONS):
-        if st.button(q, key=f"example_{i}"):
-            st.session_state["question_input"] = q
+    rows = _example_questions_for_dataset(dataset_name)
+    if not rows:
+        st.caption(
+            f"No benchmark rows for `{dataset_name}` in `{_BENCHMARK_QUESTIONS_CSV.relative_to(REPO_ROOT)}`."
+        )
+        return
+    st.caption(f"{len(rows)} benchmark prompts for **{dataset_name}** (same as `benchmark_questions.csv`).")
+    for qid, qtext in rows:
+        label = f"{qid}: {qtext}"
+        if st.button(label, key=f"example_{dataset_name}_{qid}"):
+            st.session_state["question_input"] = qtext
             st.rerun()
 
 
@@ -175,7 +196,7 @@ def main() -> None:
 
     st.divider()
     st.header("2) Ask a question")
-    _render_examples()
+    _render_examples(st.session_state.get("selected_dataset", SUPPORTED_DATASETS[0]))
 
     prompt_variant = st.selectbox("Prompt variant", list(PROMPT_VARIANTS), index=list(PROMPT_VARIANTS).index("schema_aware"))
     model_name = st.text_input("Model override (optional)", value=os.getenv("OPENAI_MODEL", ""), placeholder="Leave empty for .env default")
