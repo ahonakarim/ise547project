@@ -1,5 +1,9 @@
-# Publishes docs/ as a static site at https://<owner>.github.io/<repo>/
-# Enable once: Repository → Settings → Pages → Build and deployment → Source: GitHub Actions
+# Publishes docs/ at https://<owner>.github.io/<repo>/
+#
+# One-time (required before the first deploy succeeds):
+#   Repository → Settings → Pages → Build and deployment → Source: "GitHub Actions" → Save.
+# Do not use actions/configure-pages here: it calls GET /pages and returns 404 until the
+# site is registered above. Static deploys only need upload-pages-artifact + deploy-pages.
 
 name: Deploy GitHub Pages
 
@@ -25,7 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs

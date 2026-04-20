@@ -33,8 +33,8 @@ streamlit run app/main.py
 This repository includes a **static** landing page under `docs/` that you can host for free on **GitHub Pages** (HTML and CSS only; it cannot run Streamlit).
 
 1. Push the `main` branch to GitHub.
-2. In the repository: **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**.
-3. The workflow `.github/workflows/deploy-github-pages.yml` publishes `docs/` on each push. After the first successful run, the site is available at:
+2. **Before the first workflow run**, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**, then **Save**. (If you skip this, deployment fails because GitHub has not registered a Pages site for the repository yet.)
+3. The workflow `.github/workflows/deploy-github-pages.yml` publishes `docs/` on each push. After a successful run, the site is available at:
 
    `https://<your-username>.github.io/<repository-name>/`
 
