@@ -33,6 +33,11 @@ SUPPORTED_DATASETS: list[str] = [
 
 _BENCHMARK_QUESTIONS_CSV = REPO_ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
 
+_MSG_QUESTION_NOT_FOR_DATASET = (
+    "**Oops — that doesn’t quite fit this dataset.** "
+    "Ask about columns you see in the preview above, or pick an example question for this data."
+)
+
 # Primary time column per dataset (snake_case, aligned with processed CSVs); None when absent.
 _DATASET_META: dict[str, dict[str, Any]] = {
     "online_retail_ii": {"time_column": "invoice_date"},
@@ -153,7 +158,9 @@ def _render_results(result: Any, structured_query: Any) -> None:
         return
 
     if getattr(result, "result_type", None) == "error" or getattr(result, "error", None):
-        st.error(result.message or result.error or "Execution error")
+        detail = result.message or result.error or "Execution error"
+        st.warning(_MSG_QUESTION_NOT_FOR_DATASET)
+        st.error(detail)
         return
 
     rt = getattr(result, "result_type", None)
@@ -223,20 +230,29 @@ def main() -> None:
             config=config,
         )
     except Exception as exc:
-        _render_error(f"LLM routing failed: {exc}")
+        st.warning(
+            "**We couldn’t turn that into a structured query.** "
+            "If it’s off-topic for this table, switch datasets or rephrase; otherwise check your LLM API key and network."
+        )
+        with st.expander("Technical details"):
+            st.code(str(exc))
         return
 
     prepared = _prepare_dataframe_for_query(df, structured)
     valid, validation_errors = validate_structured_query(structured, prepared)
     if not valid:
-        st.warning("Validation failed: " + "; ".join(validation_errors))
+        st.warning(_MSG_QUESTION_NOT_FOR_DATASET)
+        with st.expander("What didn’t match"):
+            st.text("; ".join(validation_errors))
         _render_results(None, structured)
         return
 
     try:
         backend_result = execute_structured_query(prepared, structured)
     except Exception as exc:
-        _render_error(f"Execution failed: {exc}")
+        st.warning(_MSG_QUESTION_NOT_FOR_DATASET)
+        with st.expander("Technical details"):
+            st.code(str(exc))
         return
 
     _render_results(backend_result, structured)
