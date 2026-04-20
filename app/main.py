@@ -3,8 +3,15 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 from typing import Any
+
+# Streamlit Cloud runs `app/main.py`; the repo root must be on sys.path for `from app.*` imports.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+_root = str(REPO_ROOT)
+if _root not in sys.path:
+    sys.path.insert(0, _root)
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -16,8 +23,6 @@ from app.constants import DEFAULT_PREVIEW_ROWS, PROMPT_VARIANTS
 from app.llm_router import LLMRouterConfig, parse_question_to_structured_query
 from app.schemas import StructuredQuery
 from app.validator import validate_structured_query
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
 
 SUPPORTED_DATASETS: list[str] = [
     "online_retail_ii",
