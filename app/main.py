@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -19,9 +18,9 @@ import requests  # noqa: F401 — kept for parity with project tooling / future 
 import streamlit as st
 
 from app.analytics import execute_structured_query
-from app.constants import DEFAULT_PREVIEW_ROWS, PROMPT_VARIANTS
+from app.constants import DEFAULT_PREVIEW_ROWS
 from app.dataset_loader import load_dataset
-from app.llm_router import LLMRouterConfig, parse_question_to_structured_query
+from app.llm_router import parse_question_to_structured_query
 from app.schemas import StructuredQuery
 from app.validator import validate_structured_query
 
@@ -32,6 +31,7 @@ SUPPORTED_DATASETS: list[str] = [
 ]
 
 _BENCHMARK_QUESTIONS_CSV = REPO_ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
+DEFAULT_PROMPT_VARIANT = "few_shot"
 
 _MSG_QUESTION_NOT_FOR_DATASET = (
     "**Oops — that doesn’t quite fit this dataset.** "
@@ -131,20 +131,6 @@ def _prepare_dataframe_for_query(df: pd.DataFrame, query: StructuredQuery) -> pd
     return prepared
 
 
-def _llm_router_config_override(model_name: str | None) -> LLMRouterConfig | None:
-    if not model_name:
-        return None
-    base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    api_key = os.getenv("OPENAI_API_KEY", "")
-    timeout_seconds = int(os.getenv("OPENAI_TIMEOUT_SECONDS", "45"))
-    return LLMRouterConfig(
-        base_url=base_url,
-        api_key=api_key,
-        model=model_name,
-        timeout_seconds=timeout_seconds,
-    )
-
-
 def _render_results(result: Any, structured_query: Any) -> None:
     st.markdown("**Structured query**")
     if structured_query is not None:
@@ -205,9 +191,6 @@ def main() -> None:
     st.header("2) Ask a question")
     _render_examples(st.session_state.get("selected_dataset", SUPPORTED_DATASETS[0]))
 
-    prompt_variant = st.selectbox("Prompt variant", list(PROMPT_VARIANTS), index=list(PROMPT_VARIANTS).index("schema_aware"))
-    model_name = st.text_input("Model override (optional)", value=os.getenv("OPENAI_MODEL", ""), placeholder="Leave empty for .env default")
-
     question = st.text_area("Your question", key="question_input", height=100)
     run = st.button("Run query", type="primary")
 
@@ -218,16 +201,12 @@ def main() -> None:
         _render_error("Please enter a question.")
         return
 
-    dataset_name = st.session_state.get("selected_dataset", SUPPORTED_DATASETS[0])
-    config = _llm_router_config_override(model_name.strip() or None)
-
     structured: StructuredQuery | None = None
     try:
         structured = parse_question_to_structured_query(
             question=question.strip(),
             df=df,
-            prompt_variant=prompt_variant,
-            config=config,
+            prompt_variant=DEFAULT_PROMPT_VARIANT,
         )
     except Exception as exc:
         st.warning(
