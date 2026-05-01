@@ -33,6 +33,13 @@ SUPPORTED_DATASETS: list[str] = [
 _BENCHMARK_QUESTIONS_CSV = REPO_ROOT / "data" / "benchmarks" / "benchmark_questions.csv"
 DEFAULT_PROMPT_VARIANT = "few_shot"
 
+# Five benchmark IDs per dataset: summary, grouped, filtered, time-series (where applicable), + one extra variety.
+_EXAMPLE_QUESTION_IDS_BY_DATASET: dict[str, tuple[str, ...]] = {
+    "online_retail_ii": ("Q001", "Q011", "Q021", "Q031", "Q033"),
+    "yellow_tripdata_2026_01": ("Q041", "Q053", "Q065", "Q076", "Q080"),
+    "insurance": ("Q086", "Q096", "Q097", "Q106", "Q107"),
+}
+
 _MSG_QUESTION_NOT_FOR_DATASET = (
     "**Oops — that doesn’t quite fit this dataset.** "
     "Ask about columns you see in the preview above, or pick an example question for this data."
@@ -71,12 +78,16 @@ def _load_benchmark_question_rows() -> pd.DataFrame:
 
 
 def _example_questions_for_dataset(dataset_name: str) -> list[tuple[str, str]]:
-    """(question_id, question_text) pairs for ``dataset_name`` from the benchmark CSV."""
+    """Up to five (question_id, question_text) pairs: curated benchmark IDs for UI variety."""
+    wanted = _EXAMPLE_QUESTION_IDS_BY_DATASET.get(dataset_name)
+    if not wanted:
+        return []
     df = _load_benchmark_question_rows()
     if df.empty:
         return []
     sub = df[df["dataset_name"] == dataset_name]
-    return list(zip(sub["question_id"].astype(str), sub["question_text"].astype(str)))
+    by_id = dict(zip(sub["question_id"].astype(str), sub["question_text"].astype(str)))
+    return [(qid, by_id[qid]) for qid in wanted if qid in by_id]
 
 
 def _render_examples(dataset_name: str) -> None:
@@ -87,7 +98,10 @@ def _render_examples(dataset_name: str) -> None:
             f"No benchmark rows for `{dataset_name}` in `{_BENCHMARK_QUESTIONS_CSV.relative_to(REPO_ROOT)}`."
         )
         return
-    st.caption(f"{len(rows)} benchmark prompts for **{dataset_name}** (same as `benchmark_questions.csv`).")
+    st.caption(
+        f"{len(rows)} curated examples from **{dataset_name}** in `benchmark_questions.csv` "
+        "(summary, grouped, filtered" + (", time series" if dataset_name != "insurance" else "") + ")."
+    )
     for qid, qtext in rows:
         label = f"{qid}: {qtext}"
         if st.button(label, key=f"example_{dataset_name}_{qid}"):
