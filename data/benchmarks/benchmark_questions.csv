@@ -7,7 +7,7 @@ Q005,online_retail_ii,What is the median price?,summary_stat,price,median,,,,,,n
 Q006,online_retail_ii,What is the average quantity?,summary_stat,quantity,mean,,,,,,none
 Q007,online_retail_ii,What is the total number of invoices?,summary_stat,invoice,count,,,,,,none
 Q008,online_retail_ii,What is the total number of stock_code entries?,summary_stat,stock_code,count,,,,,,none
-Q009,online_retail_ii,What is the average customer_id?,summary_stat,customer_id,mean,,,,,,none
+Q009,online_retail_ii,What is the average price?,summary_stat,price,mean,,,,,,none
 Q010,online_retail_ii,What is the maximum quantity?,summary_stat,quantity,max,,,,,,none
 Q011,online_retail_ii,What is the total quantity by country?,grouped_aggregation,quantity,sum,country,,,,,bar
 Q012,online_retail_ii,What is the average price by country?,grouped_aggregation,price,mean,country,,,,,bar
@@ -25,7 +25,7 @@ Q023,online_retail_ii,What is the count of invoices where quantity > 10?,filtere
 Q024,online_retail_ii,What is the average quantity where price > 20?,filtered_aggregation,quantity,mean,,"[{""column"":""price"",""operator"":"">"",""value"":20}]",,,,none
 Q025,online_retail_ii,What is the maximum price where quantity > 1?,filtered_aggregation,price,max,,"[{""column"":""quantity"",""operator"":"">"",""value"":1}]",,,,none
 Q026,online_retail_ii,What is the minimum price where quantity > 2?,filtered_aggregation,price,min,,"[{""column"":""quantity"",""operator"":"">"",""value"":2}]",,,,none
-Q027,online_retail_ii,What is the average customer_id where quantity > 3?,filtered_aggregation,customer_id,mean,,"[{""column"":""quantity"",""operator"":"">"",""value"":3}]",,,,none
+Q027,online_retail_ii,What is the average price where quantity > 3?,filtered_aggregation,price,mean,,"[{""column"":""quantity"",""operator"":"">"",""value"":3}]",,,,none
 Q028,online_retail_ii,What is the total quantity where quantity > 50?,filtered_aggregation,quantity,sum,,"[{""column"":""quantity"",""operator"":"">"",""value"":50}]",,,,none
 Q029,online_retail_ii,What is the count of stock_code where price > 5?,filtered_aggregation,stock_code,count,,"[{""column"":""price"",""operator"":"">"",""value"":5}]",,,,none
 Q030,online_retail_ii,What is the average price where quantity > 10?,filtered_aggregation,price,mean,,"[{""column"":""quantity"",""operator"":"">"",""value"":10}]",,,,none

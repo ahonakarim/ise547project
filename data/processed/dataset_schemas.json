@@ -46,7 +46,7 @@
       "schema": [
         {
           "column": "vendor_id",
-          "dtype": "int64"
+          "dtype": "str"
         },
         {
           "column": "tpep_pickup_datetime",
@@ -66,7 +66,7 @@
         },
         {
           "column": "ratecode_id",
-          "dtype": "int64"
+          "dtype": "str"
         },
         {
           "column": "store_and_fwd_flag",
@@ -74,15 +74,15 @@
         },
         {
           "column": "pu_location_id",
-          "dtype": "int64"
+          "dtype": "str"
         },
         {
           "column": "do_location_id",
-          "dtype": "int64"
+          "dtype": "str"
         },
         {
           "column": "payment_type",
-          "dtype": "int64"
+          "dtype": "str"
         },
         {
           "column": "fare_amount",
@@ -159,7 +159,7 @@
         },
         {
           "column": "customer_id",
-          "dtype": "float64"
+          "dtype": "str"
         },
         {
           "column": "country",

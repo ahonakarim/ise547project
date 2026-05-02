@@ -196,10 +196,52 @@ chart_type_correct: 0
 
 ------------
 
+Input file: outputs/eval_runs/model_llama31_fewshot_10.csv
+Total rows: 10
 
+Core Metrics
+------------
+parse_success: 10/10 (100.00%)
+exact_match:   8/10 (80.00%)
+
+Error Message Counts
+--------------------
+    10  (empty)
+
+Failed Field Counts
+-------------------
+task_type_correct: 0
+metric_column_correct: 2
+aggregation_correct: 1
+groupby_column_correct: 0
+filter_correct: 0
+time_column_correct: 0
+time_granularity_correct: 0
+chart_type_correct: 0
 
 ------------
 
+Input file: outputs/eval_runs/model_gemma_fewshot_10.csv
+Total rows: 10
 
+Core Metrics
+------------
+parse_success: 10/10 (100.00%)
+exact_match:   10/10 (100.00%)
+
+Error Message Counts
+--------------------
+    10  (empty)
+
+Failed Field Counts
+-------------------
+task_type_correct: 0
+metric_column_correct: 0
+aggregation_correct: 0
+groupby_column_correct: 0
+filter_correct: 0
+time_column_correct: 0
+time_granularity_correct: 0
+chart_type_correct: 0
 
 ------------
